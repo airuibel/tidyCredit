@@ -498,7 +498,8 @@ chiMergeNum <- function(
                   ','
                   , ''
                   , regmatches(
-                    regexpr('(\\,\\d*\\.?\\d+)|(\\,\\-d*\\.?\\d+)',cutbins,perl = T)
+                    # regexpr('(\\,\\d*\\.?\\d+)|(\\,\\-d*\\.?\\d+)',cutbins,perl = T)
+                    regexpr('\\,(?>-)*[[:digit:]]+\\.*[[:digit:]]*',cutbins,perl = T)
                     , x = cutbins
                   )
                 )
