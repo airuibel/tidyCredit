@@ -269,9 +269,13 @@ chiMergeNum <- function(
   }else{
 
     corValue <- fifelse(
-      is.na(cor(data[, x],data[, yValue],method = 'spearman',use = 'pairwise.complete.obs'))
+      suppressWarnings(
+        is.na(cor(data[, x],data[, yValue],method = 'spearman',use = 'pairwise.complete.obs'))
+      )
       , 0
-      , cor(data[, x],data[, yValue],method = 'spearman',use = 'pairwise.complete.obs')
+      , suppressWarnings(
+        cor(data[, x],data[, yValue],method = 'spearman',use = 'pairwise.complete.obs')
+      )
     )
 
   }

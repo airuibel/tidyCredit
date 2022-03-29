@@ -21,7 +21,7 @@ modelEffect(
 
 \item{labelSign}{Response value label name.Default is c('bad','1','no','response').}
 
-\item{show}{Column of results,The full column name is c('vars', 'bins', 'count', 'countRate', 'nmlCount', 'nmlCountCum', 'nmlCountCumRate', 'rpsCount', 'rpsCountCum', 'rpsCountCumRate', 'rpsRate', 'woe', 'iv', 'totalIv', 'totalIvAdj', 'binsLift', 'shape', 'splits', 'isSpecial').}
+\item{show}{c('ks','roc','lift','density')}
 }
 \value{
 ks','roc','lift','density' and some other metrics

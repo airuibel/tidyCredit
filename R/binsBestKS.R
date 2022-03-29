@@ -289,9 +289,13 @@ binsBestKS <- function(  ##  分裂时的最大值最小值可能等于样本的
   }else{
 
     corValue <- fifelse(
-      is.na(cor(data[, x],data[, yValue],method = 'spearman',use = 'pairwise.complete.obs'))
+      suppressWarnings(
+        is.na(cor(data[, x],data[, yValue],method = 'spearman',use = 'pairwise.complete.obs'))
+      )
       , 0
-      , cor(data[, x],data[, yValue],method = 'spearman',use = 'pairwise.complete.obs')
+      , suppressWarnings(
+        cor(data[, x],data[, yValue],method = 'spearman',use = 'pairwise.complete.obs')
+      )
     )
 
   }

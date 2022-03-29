@@ -6,7 +6,7 @@
 #' @param label Y label
 #' @param ord Fractional or probabilistic monotonic direction,'desc' or 'asc'.
 #' @param labelSign Response value label name.Default is c('bad','1','no','response').
-#' @param show Column of results,The full column name is c('vars', 'bins', 'count', 'countRate', 'nmlCount', 'nmlCountCum', 'nmlCountCumRate', 'rpsCount', 'rpsCountCum', 'rpsCountCumRate', 'rpsRate', 'woe', 'iv', 'totalIv', 'totalIvAdj', 'binsLift', 'shape', 'splits', 'isSpecial').
+#' @param show c('ks','roc','lift','density')
 #'
 #' @return ks','roc','lift','density' and some other metrics
 #'
@@ -165,7 +165,7 @@ modelEffect <- function(
 
     if (predLen != labelLen){
 
-      stop('结果和标签组数不一致。')
+      stop('The result is inconsistent with the number of label groups.')
 
     }
 
@@ -197,7 +197,7 @@ modelEffect <- function(
 
     } else{
 
-      stop('该参数只支持desc或者asc。')
+      stop('This parameter only supports desc or asc.')
 
     }
 
@@ -331,7 +331,12 @@ modelEffect <- function(
 
     ksmini <- modelDataDt |>
       group_by(type) |>
-      e_charts(countRate, height = 250, width = 250) |>
+      e_charts(
+        countRate
+        # , height = 250
+        # , width = 250
+      ) |>
+      e_dims(height = "auto", width = "auto")|>
       e_title('KS'
               ,ksCha) |>
       e_line(gcumRate,symbol='none', smooth = TRUE) |>
@@ -356,7 +361,12 @@ modelEffect <- function(
 
     rocmini <- modelDataDt |>
       group_by(type) |>
-      e_charts(gcumRate, height = 250, width = 250) |>
+      e_charts(
+        gcumRate
+        # , height = 250
+        # , width = 250
+      ) |>
+      e_dims(height = "auto", width = "auto")|>
       e_title('ROC', rocCha) |>
       e_line(bcumRate, symbol='none', smooth = TRUE) |> # add a line
       # e_area(bcumRate, symbol='none', smooth = TRUE) |>
@@ -378,7 +388,12 @@ modelEffect <- function(
 
     liftmini <- modelDataDt |>
       group_by(type) |>
-      e_charts(countRate, height = 250, width = 250) |>
+      e_charts(
+        countRate
+        # , height = 250
+        # , width = 250
+      ) |>
+      e_dims(height = "auto", width = "auto")|>
       e_title('LIFT',liftCha) |>
       e_line(lift, symbol='none', smooth = TRUE) |> # add a line
       # e_area(bcumRate, symbol='none', smooth = TRUE) |>
@@ -402,7 +417,12 @@ modelEffect <- function(
 
     densitymini <- modelDataDt |>
       group_by(type,y) |>
-      e_charts(countRate, height = 250, width = 250) |>
+      e_charts(
+        countRate
+        # , height = 250
+        # , width = 250
+      ) |>
+      e_dims(height = "auto", width = "auto")|>
       e_title(
         'Density'
         # , paste0("Lift Max Value: ",max(modelData$lift,na.rm = T))
@@ -494,7 +514,7 @@ modelEffect <- function(
 
     } else{
 
-      stop('该参数只支持desc或者asc。')
+      stop('This parameter only supports desc or asc.')
 
     }
 
@@ -552,8 +572,11 @@ modelEffect <- function(
 
     ksmini <- modelData |>
       e_charts(
-        countRate,height = 250, width = 250
+        countRate
+        # , height = 250
+        # , width = 250
       ) |>
+      e_dims(height = "auto", width = "auto")|>
       e_title('KS',paste0("Ks Max Value: ",max(modelData$ks,na.rm = T))) |>
       e_line(gcumRate,symbol='none', smooth = TRUE) |>
       e_line(bcumRate,symbol='none', smooth = TRUE) |>
@@ -577,7 +600,12 @@ modelEffect <- function(
 
     rocmini <- modelData |>
       # group_by(type) |>
-      e_charts(gcumRate,height = 250, width = 250) |>
+      e_charts(
+        gcumRate
+        # , height = 250
+        # , width = 250
+      ) |>
+      e_dims(height = "auto", width = "auto")|>
       e_title('ROC',paste0("AUC Value: ",aucValue)) |>
       e_line(bcumRate, symbol='none', smooth = TRUE) |> # add a line
       # e_area(bcumRate, symbol='none', smooth = TRUE) |>
@@ -599,7 +627,12 @@ modelEffect <- function(
 
     liftmini <- modelData |>
       # group_by(type) |>
-      e_charts(countRate,height = 250, width = 250) |>
+      e_charts(
+        countRate
+        # , height = 250
+        # , width = 250
+      ) |>
+      e_dims(height = "auto", width = "auto")|>
       e_title('LIFT',paste0("Lift Max Value: ",max(modelData$lift,na.rm = T))) |>
       e_line(lift, symbol='none', smooth = TRUE) |> # add a line
       # e_area(bcumRate, symbol='none', smooth = TRUE) |>
@@ -623,7 +656,12 @@ modelEffect <- function(
 
     densitymini <- modelData |>
       group_by(y) |>
-      e_charts(countRate,height = 250, width = 250) |>
+      e_charts(
+        countRate
+        # , height = 250
+        # , width = 250
+      ) |>
+      e_dims(height = "auto", width = "auto")|>
       e_title('Density') |> # , paste0("Lift Max Value: ",max(modelData$lift,na.rm = T))
       e_density(pred) |>
       e_theme("westeros") |>
