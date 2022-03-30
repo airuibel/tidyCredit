@@ -43,6 +43,8 @@ woeTrans <- function(
   , supplyCl = NULL #  多线程的核心数,默认使用电脑一般核心数
 ){
 
+  options(future.globals.maxSize = Inf)
+
   handlers(global = TRUE)
   handlers("progress")
 
