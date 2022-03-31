@@ -3,7 +3,7 @@
 #' @param data
 #' @param y
 #' @param x
-#' @param ksLimit
+#' @param gainLimit
 #' @param initialBins
 #' @param limit
 #' @param breaksList
@@ -20,19 +20,14 @@
 #' @param maxIterationLimit
 #'
 #' @return
-#'
-#' @import data.table
-#'
 #' @export
 #'
 #' @examples
-#'
-
-binsBestKS <- function(  ##  分裂时的最大值最小值可能等于样本的最大值最小值，需要更改
+binsMdlp <- function(  ##  分裂时的最大值最小值可能等于样本的最大值最小值，需要更改
   data
   , y
   , x
-  , ksLimit = 0.03
+  , gainLimit = 0.001
   , initialBins = NULL
   , limit = 0.05
   , breaksList = NULL
@@ -48,66 +43,6 @@ binsBestKS <- function(  ##  分裂时的最大值最小值可能等于样本的
   , ifMonotonous = 0 # 判断是否单调 0：单调；1：不单调；
   , maxIterationLimit = Inf # 最大迭代次数
 ){
-
-  ksCal <- function(data,ksLimit,ksSplit = NULL) {
-
-    if (is.null(ksSplit) == F){
-
-      data <- data[!(x %in% unname(ksSplit))]
-
-    }
-
-    suppressWarnings(
-      data[
-        , `:=`(
-          count = .I
-          , gcum = cumsum(ifelse(yValue == 0,1,0))
-          , bcum = cumsum(ifelse(yValue == 1,1,0))
-        )
-      ][
-        , `:=`(
-          countRate = count/max(count)
-          , gcumRate = round(gcum / max(gcum,na.rm = T),4)
-          , bcumRate = round(bcum / max(bcum,na.rm = T),4)
-        )
-      ][
-        , `:=`(
-          ks = abs(gcumRate - bcumRate)
-        )
-      ]
-    )
-
-    # print(data)
-
-    suppressWarnings(
-      ksMax <- min(
-        data[
-          ks == max(data[, ks],na.rm = T)
-          , x
-        ]
-        , na.rm = T
-      )
-    )
-
-    suppressWarnings(
-      ksMaxValue <- min(
-        data[
-          ks == max(data[, ks],na.rm = T)
-          , ks
-        ]
-      )
-    )
-
-
-    if (ksMaxValue <= ksLimit){
-
-      ksMax <- NULL
-
-    }
-
-    return(ksMax)
-
-  }
 
   data <- copy(data)
 
@@ -314,17 +249,7 @@ binsBestKS <- function(  ##  分裂时的最大值最小值可能等于样本的
 
   ksSplit <- vector()
 
-  ksMaxValue <- ksCal(data = data,ksLimit = ksLimit)
-
-  # if (ksMaxValue == data[,min(x,na.rm = T)]){
-  #
-  #   ksMaxValue <- (valueSort[1] + valueSort[2]) / 2
-  #
-  # } else if (ksMaxValue == data[,max(x,na.rm = T)]){
-  #
-  #   ksMaxValue <- (valueSort[length(valueSort)] + valueSort[length(valueSort) - 1]) / 2
-  #
-  # }
+  ksMaxValue <- mdlp(data = data,y = 'y',x = 'x',gainLimit = gainLimit)
 
   ksSplit <- append(
     ksSplit
@@ -349,6 +274,8 @@ binsBestKS <- function(  ##  分裂时的最大值最小值可能等于样本的
 
     if (is.null(unlist(ksMaxValue))){
 
+      # print(1)
+
       break
 
     }
@@ -357,18 +284,20 @@ binsBestKS <- function(  ##  分裂时的最大值最小值可能等于样本的
 
       ksMaxValue <- lapply(
         dataList
-        , function(x) ksCal(data = x,ksLimit,ksSplit = ksSplit)
+        , function(x) mdlp(data = x,y = 'y',x = 'x',gainLimit = gainLimit)
       )
 
       # print(unname(ksMaxValue))
       #
       # print(data[,min(x,na.rm = T)])
 
-      if (is.null(unlist(ksMaxValue))){
-
-        break
-
-      }
+      # if (is.null(unlist(ksMaxValue))){
+      #
+      #   print(1)
+      #
+      #   break
+      #
+      # }
 
       if (
         length(
@@ -495,44 +424,6 @@ binsBestKS <- function(  ##  分裂时的最大值最小值可能等于样本的
       , by = cutbins
     ]
 
-    # as.numeric(
-    #   sub(
-    #     ','
-    #     , ''
-    #     , regmatches(
-    #       regexpr('(\\,\\d*\\.?\\d+)',cutbins,perl = T)
-    #       , x = cutbins
-    #     )
-    #   )
-    # )
-
-    # print(dataCutbinsDs)
-
-
-
-    # [
-    #   , `:=`(
-    #     mp = c(sort(unlist(unique(ksSplit))),Inf)
-    #   )
-    # ][]
-
-    # print(dataCutbinsDs)
-
-    # print(ksSplitAssis)
-    # print(ksSplit)
-    #
-    # if (identical(ksSplitAssis,ksSplit)){
-    #
-    #   break
-    #
-    # }
-    #
-    # ksSplitAssis <- ksSplit
-
-    # ksSplit <- dataCutbinsDs[,mp]
-
-    # print(unname(ksSplit))
-
     ##  其他参数条件
 
     binsNum <- dataCutbinsDs[,.N]
@@ -571,6 +462,8 @@ binsBestKS <- function(  ##  分裂时的最大值最小值可能等于样本的
       | nextLoop == 1
     ){
 
+      # print(1)
+
       if (nrow(dataCutbinsDs) == 1){
 
         break
@@ -579,7 +472,7 @@ binsBestKS <- function(  ##  分裂时的最大值最小值可能等于样本的
 
       if (MinBinsNum < MinBinsNumLimit){
 
-        # print(1)
+        # print(2)
 
         repeat{
 

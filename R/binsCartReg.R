@@ -494,7 +494,8 @@ binsCartReg <- function(  ##  分裂时的最大值最小值可能等于样本�
               ','
               , ''
               , regmatches(
-                regexpr('(\\,\\d*\\.?\\d+)|(\\,\\-d*\\.?\\d+)',cutbins,perl = T)
+                # regexpr('(\\,\\d*\\.?\\d+)|(\\,\\-d*\\.?\\d+)',cutbins,perl = T)
+                regexpr('\\,(?>-)*[[:digit:]]+\\.*[[:digit:]]*',cutbins,perl = T)
                 , x = cutbins
               )
             )
@@ -502,7 +503,7 @@ binsCartReg <- function(  ##  分裂时的最大值最小值可能等于样本�
         )
       )
       , by = cutbins
-    ]
+    ][]
 
     # as.numeric(
     #   sub(
@@ -735,8 +736,24 @@ binsCartReg <- function(  ##  分裂时的最大值最小值可能等于样本�
             )
           ][
             , `:=`(
-              mp = c(sort(unlist(unique(cartSplit))))
+              mp = fcase(
+                cutbins %like% 'Inf)' == T
+                , Inf
+                , cutbins %like% 'Inf)' == F
+                , as.numeric(
+                  sub(
+                    ','
+                    , ''
+                    , regmatches(
+                      # regexpr('(\\,\\d*\\.?\\d+)|(\\,\\-d*\\.?\\d+)',cutbins,perl = T)
+                      regexpr('\\,(?>-)*[[:digit:]]+\\.*[[:digit:]]*',cutbins,perl = T)
+                      , x = cutbins
+                    )
+                  )
+                )
+              )
             )
+            , by = cutbins
           ][]
 
           ##  其他参数条件
@@ -810,8 +827,24 @@ binsCartReg <- function(  ##  分裂时的最大值最小值可能等于样本�
             )
           ][
             , `:=`(
-              mp = c(sort(unlist(unique(cartSplit))))
+              mp = fcase(
+                cutbins %like% 'Inf)' == T
+                , Inf
+                , cutbins %like% 'Inf)' == F
+                , as.numeric(
+                  sub(
+                    ','
+                    , ''
+                    , regmatches(
+                      # regexpr('(\\,\\d*\\.?\\d+)|(\\,\\-d*\\.?\\d+)',cutbins,perl = T)
+                      regexpr('\\,(?>-)*[[:digit:]]+\\.*[[:digit:]]*',cutbins,perl = T)
+                      , x = cutbins
+                    )
+                  )
+                )
+              )
             )
+            , by = cutbins
           ][]
 
           ##  其他参数条件
@@ -897,8 +930,24 @@ binsCartReg <- function(  ##  分裂时的最大值最小值可能等于样本�
             )
           ][
             , `:=`(
-              mp = c(sort(unlist(unique(cartSplit))))
+              mp = fcase(
+                cutbins %like% 'Inf)' == T
+                , Inf
+                , cutbins %like% 'Inf)' == F
+                , as.numeric(
+                  sub(
+                    ','
+                    , ''
+                    , regmatches(
+                      # regexpr('(\\,\\d*\\.?\\d+)|(\\,\\-d*\\.?\\d+)',cutbins,perl = T)
+                      regexpr('\\,(?>-)*[[:digit:]]+\\.*[[:digit:]]*',cutbins,perl = T)
+                      , x = cutbins
+                    )
+                  )
+                )
+              )
             )
+            , by = cutbins
           ][]
 
           if (corValue > 0){
@@ -980,8 +1029,24 @@ binsCartReg <- function(  ##  分裂时的最大值最小值可能等于样本�
             )
           ][
             , `:=`(
-              mp = c(sort(unlist(unique(cartSplit))))
+              mp = fcase(
+                cutbins %like% 'Inf)' == T
+                , Inf
+                , cutbins %like% 'Inf)' == F
+                , as.numeric(
+                  sub(
+                    ','
+                    , ''
+                    , regmatches(
+                      # regexpr('(\\,\\d*\\.?\\d+)|(\\,\\-d*\\.?\\d+)',cutbins,perl = T)
+                      regexpr('\\,(?>-)*[[:digit:]]+\\.*[[:digit:]]*',cutbins,perl = T)
+                      , x = cutbins
+                    )
+                  )
+                )
+              )
             )
+            , by = cutbins
           ][]
 
           BinsBadRateLeadDiffProduct <- list()
